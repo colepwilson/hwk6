@@ -6,12 +6,29 @@
 #   make all returned values from functions go in $v0
 
 .data
-	array: # Write the definition here
-	cout:  # Write the definition here
+array:      .word 1 2 3 4 5 6 7 8 9 10
+cout:       .asciiz "The contents of the array are:\n"
+newline:    .asciiz "\n"
 
 .text
 printArr:
     # TODO: Write your function code here
+    la $a0, cout
+    addi $a0, $a0, -4                       # address of last element of array
+    addi $a1, $a1, -1
+
+for:
+    blt $a1, $zero, return
+    syscall
+    move $t0, $a0
+    la $a0, newline
+    syscall
+    addi $t0, $t0, -4
+    move $a0, $t0
+    j for
+
+return:
+    jr $ra
 
 main:  # DO NOT MODIFY THE MAIN SECTION
 	li $v0, 4
