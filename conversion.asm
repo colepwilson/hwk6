@@ -7,7 +7,26 @@
 
 .text
 conv:
-    # TODO: Write your function code here
+    li $v0, 0                   # int z
+    li $t0, 0                   # int i
+    li $t1, 2
+
+for:
+    bge $t0, $a2, return
+    sll $t2, $a1, 2             # placeholder for 4 * y
+    sub $v0, $v0, $a0
+    add $v0, $v0, $t2
+
+    blt $a0, $t1, here
+    sub $a1, $a1, $a0
+
+here:
+    addi $a0, $a0, 1
+    addi $t0, $t0, 1
+    j for
+
+return:
+    jr $ra
 
 main:  # DO NOT MODIFY THE MAIN SECTION
     li $a0, 5
