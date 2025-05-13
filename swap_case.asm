@@ -128,8 +128,6 @@ loop:
     addi $t0, $t0, 32
     sb $t0, 0($s0)
 
-    jal ConventionCheck
-
     li $v0, 4
     move $a0, $sp
     syscall
@@ -148,6 +146,8 @@ loop:
     la $a0, newline
     syscall
     addi $sp, $sp, 8
+
+    jal ConventionCheck
 
     j next_letter
 
@@ -160,8 +160,6 @@ make_upper:
     addi $t0, $t0, -32
     sb $t0, 0($s0)
 
-    jal ConventionCheck
-
     li $v0, 4
     move $a0, $sp
     syscall
@@ -180,6 +178,8 @@ make_upper:
     la $a0, newline
     syscall
     addi $sp, $sp, 8
+
+    jal ConventionCheck
 
 next_letter:
     addi $s0, $s0, 1
