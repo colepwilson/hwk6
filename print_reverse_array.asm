@@ -13,18 +13,23 @@ newline:    .asciiz "\n"
 .text
 printArr:
     # TODO: Write your function code here
-    la $a0, cout
-    addi $a0, $a0, -4                       # address of last element of array
-    addi $a1, $a1, -1
+    move $t0, $a0
+    addi $t1, $a1, -1
 
 for:
-    blt $a1, $zero, return
+    blt $t1, $zero, return
+    sll $t2, $t1, 2
+    add $t3, $t0, $t2
+
+    lw $a0, 0($t3)
+    li $v0, 1
     syscall
-    move $t0, $a0
+
     la $a0, newline
+    li $v0, 4
     syscall
-    addi $t0, $t0, -4
-    move $a0, $t0
+
+    addi $t1, $t1, -1
     j for
 
 return:

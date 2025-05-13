@@ -93,7 +93,103 @@ Exit:
 # YOU CAN ONLY MODIFY THIS FILE FROM THIS POINT ONWARDS:
 SwapCase:
     #TODO: write your code here, $a0 stores the address of the string
-    
+    addi $sp, $sp, -12
+    sw $s0, 0($sp)
+    sw $s1, 4($sp)
+    sw $ra, 8($sp)
+    move $s0, $a0
+    li $s1, 100
+    add $s1, $s1, $a0
+
+loop:
+    bge $s0, $s1, return
+    lbu $t0, 0($s0)
+    beq $t0, $zero, return
+
+    li $t1, 97
+    li $t2, 122
+    slt $t3, $t0, $t1
+    slt $t4, $t2, $t0
+    or $t5, $t3, $t4
+    beq $t5, $zero, make_upper
+
+    li $t1, 65
+    li $t2, 90
+    slt $t3, $t0, $t1
+    slt $t4, $t2, $t0
+    or $t5, $t3, $t4
+    bne $t5, $zero, next_letter
+
+    andi $t6, $t0, 0xFF
+    addi $sp, $sp, -8
+    sb $t6, 0($sp)
+    sb $zero, 1($sp)
+
+    addi $t0, $t0, 32
+    sb $t0, 0($s0)
+
+    jal ConventionCheck
+
+    li $v0, 4
+    move $a0, $sp
+    syscall
+    li $v0, 4
+    la $a0, newline
+    syscall
+
+    lbu $t7, 0($s0)
+    andi $t7, $t7, 0xFF
+    sb $t7, 0($sp)
+    sb $zero, 1($sp)
+    li $v0, 4
+    move $a0, $sp
+    syscall
+    li $v0, 4
+    la $a0, newline
+    syscall
+    addi $sp, $sp, 8
+
+    j next_letter
+
+make_upper:
+    andi $t6, $t0, 0xFF
+    addi $sp, $sp, -8
+    sb $t6, 0($sp)
+    sb $zero, 1($sp)
+
+    addi $t0, $t0, -32
+    sb $t0, 0($s0)
+
+    jal ConventionCheck
+
+    li $v0, 4
+    move $a0, $sp
+    syscall
+    li $v0, 4
+    la $a0, newline
+    syscall
+
+    lbu $t7, 0($s0)
+    andi $t7, $t7, 0xFF
+    sb $t7, 0($sp)
+    sb $zero, 1($sp)
+    li $v0, 4
+    move $a0, $sp
+    syscall
+    li $v0, 4
+    la $a0, newline
+    syscall
+    addi $sp, $sp, 8
+
+next_letter:
+    addi $s0, $s0, 1
+    j loop
+
+return:
+    lw $ra, 8($sp)
+    lw $s0, 0($sp)
+    lw $s1, 4($sp)
+    addi $sp, $sp, 12
     # Do not remove the "jr $ra" line below!!!
     # It should be the last line in your function code!
     jr $ra
